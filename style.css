@@ -1,0 +1,14 @@
+* {
+    margin:0px;
+    padding:0px;
+    box-sizing: border-box;
+}
+.bs{
+    border:1px solid red;
+}
+.padding10{
+    padding:10px;
+}
+.marginbottom10{
+    margin-bottom: 10px;
+}
