@@ -93,7 +93,7 @@ let init1 = () => {
 }
 window.addEventListener(`load`, () => {
     init1();
-    let url = `temp.php/`; //////////////////////////Change url !!!
+    let url = `ttemp/`; //////////////////////////Change url !!!
                           // url to get ALL comments data from server
     let request = new XMLHttpRequest();
     request.open(`GET`, url, true);
@@ -107,7 +107,7 @@ window.addEventListener(`load`, () => {
     request.onload = () => {
      console.log(request.response);
     }
-    request.setRequestHeader('Content-Type','application/json');
+    // request.setRequestHeader('Content-Type','application/json');
     request.send(null);
 
 }, false);

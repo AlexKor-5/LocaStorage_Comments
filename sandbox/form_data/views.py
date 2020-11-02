@@ -8,7 +8,6 @@ def base(request):
 		print('base')
 		return render(request, "form_data/index.html")
 	if request.method == 'POST':
-		print(request.body)
 		return HttpResponse("OK!!!")
 	
 

@@ -1,12 +1,17 @@
 from django.db import models
 
+class PersonManager(models.Manager):
+    def get_by_natural_key(self, author, text, created):
+        return self.get(author=author, text=text, created=created)
+
+
 class Comment(models.Model):
 	author = models.CharField(max_length=50)
 	text = models.CharField(max_length=200)
 	created = models.DateTimeField(auto_now_add=True)
 
-	def __str__(self):
-		return {'author':self.author, 'text':self.text, 'created':self.created}
+	def natural_key(self):
+		return (self.author, self.text, self.created)
 
 	class Meta:
 		ordering = ('-created',)

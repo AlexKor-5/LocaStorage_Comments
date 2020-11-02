@@ -42,7 +42,8 @@ INSTALLED_APPS = (
     'main',
     'ajax',
     'comments',
-    'form_data'
+    'form_data',
+    'myapp',
 )
 
 MIDDLEWARE_CLASSES = (

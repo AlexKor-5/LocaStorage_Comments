@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^', include('main.urls', namespace='main')),
     url(r'^ajax/', include('ajax.urls', namespace='ajax')),
     url(r'^comments/', include('comments.urls', namespace='comments')),
-    url(r'^form_data', include('form_data.urls', namespace='form_data')),
+    url(r'^form_data/', include('form_data.urls', namespace='form_data')),
+    url(r'^myapp/', include('myapp.urls', namespace='myapp')),
 ]
