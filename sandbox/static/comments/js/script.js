@@ -93,7 +93,7 @@ let init1 = () => {
 }
 window.addEventListener(`load`, () => {
     init1();
-    let url = `temp.php/`; //////////////////////////Change url !!!
+    let url = `temp/`; //////////////////////////Change url !!!
                           // url to get ALL comments data from server
     let request = new XMLHttpRequest();
     request.open(`GET`, url, true);
