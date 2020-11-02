@@ -14,7 +14,7 @@ let init1 = () => {
                     if(response.status !== 200){
                         console.log(`Something has gone wrong!!!`);
                     };
-                    resolve(response.json());
+                    resolve(response.text());
                 })
         });
 

@@ -107,7 +107,7 @@ window.addEventListener(`load`, () => {
     request.onload = () => {
      console.log(request.response);
     }
-    // request.setRequestHeader('Content-Type','application/json');
+    request.setRequestHeader('Content-Type','application/json');
     request.send(null);
 
 }, false);
