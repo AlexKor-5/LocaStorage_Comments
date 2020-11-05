@@ -18,18 +18,19 @@ def temp(request):
 def ttemp(request):
 	comments = Comment.objects.all()
 
-	rs_d = dict()
+	rs_d = list()
+
 	for comment in comments:
-		rs_d[comment.id] = {'name':comment.author, 
+		rs_d.append({'name':comment.author, 
 							'comment':comment.text,
 							'data':comment.created,
 							'index':comment.index,
-							}
+							})
 
 	print(rs_d)
 # Working	
 	# data = serializers.serialize("json", comments)
 	# response_data = json.loads(data)
 
-	return JsonResponse(rs_d)
+	return JsonResponse(rs_d, safe=False)
 
