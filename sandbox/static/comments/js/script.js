@@ -106,6 +106,8 @@ window.addEventListener(`load`, () => {
     }
     request.onload = () => {
      console.log(request.response);
+     let gottenObj = request.response;
+     console.log(gottenObj[0].fields);
     }
     request.setRequestHeader('Content-Type','application/json');
     request.send(null);
