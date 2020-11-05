@@ -8,7 +8,8 @@ class PersonManager(models.Manager):
 class Comment(models.Model):
 	author = models.CharField(max_length=50)
 	text = models.CharField(max_length=200)
-	created = models.DateTimeField(auto_now_add=True)
+	created = models.CharField(max_length=50)
+	index = models.BigIntegerField(null=True)
 
 	def natural_key(self):
 		return (self.author, self.text, self.created)
