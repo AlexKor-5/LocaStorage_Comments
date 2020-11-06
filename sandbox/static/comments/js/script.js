@@ -1,10 +1,32 @@
-let init1 = () => {
+let init1 = (indexServer, dataObj) => {
     let btn_comment = document.getElementById(`btn-comment`);
     let userName = document.getElementById(`userName`);
     let userComments = document.getElementById(`userComments`);
     Allcomments = [];
     let dataComments = document.getElementById(`dataComments`);
-    let indexServer = -1;
+
+    let displayAllServerData = (dataObj) => {
+
+        let sortOut = (() => {
+            dataObj.sort((a, b) => {
+                return a.index - b.index;
+            });
+            dataObj.reverse();
+            console.log(dataObj);
+        })();
+
+        for (let i = dataObj.length - 1; i >= 0; i--) {
+            dataComments.insertAdjacentHTML(`afterbegin`, `
+            <div class="alert alert-info">
+               <div class="text-right">${dataObj[i].data}</div>
+               <div><span class="badge badge-light padding10 marginbottom10">${dataObj[i].name}</span></div>
+               <div>${dataObj[i].comment}</div>
+            </div>
+          `);
+        };
+        console.log(`i ma working!!!`);
+    };
+    displayAllServerData(dataObj);
 
     let timeConverter = (UNIX_timestamp) => {
         let a = new Date(UNIX_timestamp * 1000);
@@ -20,38 +42,39 @@ let init1 = () => {
     }
 
     let showComments = () => {
-        [...dataComments.children].forEach((element) => {
-            dataComments.removeChild(element);
-        });
-        Allcomments.forEach((element, index) => {
-            DOMcreatingComments = (() => {
-                dataComments.insertAdjacentHTML(`afterbegin`, `
-                  <div class="alert alert-info">
-                     <div class="text-right">${element.date}</div>
-                     <div><span class="badge badge-light padding10 marginbottom10">${element.name}</span></div>
-                     <div>${element.comment}</div>
-                  </div>
-                `);
+        // [...dataComments.children].forEach((element) => {
+        //     dataComments.removeChild(element);
+        // });
+        // Allcomments.forEach((element, index) => {
+        //     DOMcreatingComments = (() => {
+        //         dataComments.insertAdjacentHTML(`afterbegin`, `
+        //           <div class="alert alert-info">
+        //              <div class="text-right">${element.date}</div>
+        //              <div><span class="badge badge-light padding10 marginbottom10">${element.name}</span></div>
+        //              <div>${element.comment}</div>
+        //           </div>
+        //         `);
 
-            })();
-        });
+        //     })();
+        // });
+
     }
 
-    let saveComments = () => {
-        localStorage.setItem(`comments`, JSON.stringify(Allcomments));
-    }
+    // let saveComments = () => {
+    //     localStorage.setItem(`comments`, JSON.stringify(Allcomments));
+    // }
 
-    let loadComments = () => {
-        if (localStorage.getItem(`comments`)) {
-            Allcomments = JSON.parse(localStorage.getItem(`comments`));
-        }
-        showComments();
-    }
+    // let loadComments = () => {
+    //     if (localStorage.getItem(`comments`)) {
+    //         Allcomments = JSON.parse(localStorage.getItem(`comments`));
+    //     }
+    //     showComments();
+    // }
 
     async function sendToServer(object) {
         console.log(object);
         let url = `temp/`; //////////////////////////Change url !!!
-                              // url to send current comment data to server
+        // url to send current comment data to server
         fetch(url, {
             method: `POST`,
             headers: {
@@ -78,26 +101,65 @@ let init1 = () => {
             index: indexServer
         }
         Allcomments.push(object);
-        saveComments();
-        showComments();
-        sendToServer(object);
+
+        let promise = new Promise((resolve, reject) => {
+            resolve(sendToServer(object));
+        }).then(() => {
+            let url = `ttemp/`;
+            let request = new XMLHttpRequest();
+            request.open(`GET`, url, true);
+
+            request.responseType = `json`;
+            request.onreadystatechange = () => {
+                if (request.readyState == 4 && request.status == 200) {
+                    console.log(`Sucsess !`);
+                }
+            }
+            request.onload = () => {
+                console.log(request.response);
+                let gottenObj = request.response;
+
+                if (gottenObj.length !== 0) {
+                    let findMaxindex = () => {
+                        let m = [];
+                        for (let i = 0; i < gottenObj.length; i++) {
+                            m.push(gottenObj[i].index);
+                        }
+                        return Math.max(...m);
+                    }
+                    indexServer = findMaxindex();
+                    displayAllServerData(dataObj);
+                }
+            }
+
+            request.setRequestHeader('Content-Type', 'application/json');
+            request.send(null);
+
+
+
+            console.log(`after send`);
+        });
+
 
         userName.value = ``;
         userComments.value = ``;
     }
 
     let main = (() => {
-        loadComments();
         btn_comment.addEventListener(`click`, addComment, false);
+
+        window.addEventListener(`storage`, (event) => {
+            console.log(`storage change`);
+        }, false);
     })();
 }
-window.addEventListener(`load`, () => {
-    init1();
+
+let getAllIfrormation = () => {
     let url = `ttemp/`; //////////////////////////Change url !!!
-                          // url to get ALL comments data from server
+    // url to get ALL comments data from server
     let request = new XMLHttpRequest();
     request.open(`GET`, url, true);
-   
+
     request.responseType = `json`;
     request.onreadystatechange = () => {
         if (request.readyState == 4 && request.status == 200) {
@@ -105,11 +167,28 @@ window.addEventListener(`load`, () => {
         }
     }
     request.onload = () => {
-     console.log(request.response);
-     let gottenObj = request.response;
-     console.log(gottenObj[0].fields);
+        console.log(request.response);
+        let gottenObj = request.response;
+
+        if (gottenObj.length !== 0) {
+            let findMaxindex = () => {
+                let m = [];
+                for (let i = 0; i < gottenObj.length; i++) {
+                    m.push(gottenObj[i].index);
+                }
+                return Math.max(...m);
+            }
+            indexServer = findMaxindex();
+        }
+        init1(indexServer, gottenObj);
     }
-    request.setRequestHeader('Content-Type','application/json');
+
+    request.setRequestHeader('Content-Type', 'application/json');
     request.send(null);
+}
+
+window.addEventListener(`load`, () => {
+    let indexServer = -1;
+    getAllIfrormation();
 
 }, false);
