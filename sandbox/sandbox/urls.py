@@ -23,4 +23,5 @@ urlpatterns = [
     url(r'^comments/', include('comments.urls', namespace='comments')),
     url(r'^form_data/', include('form_data.urls', namespace='form_data')),
     url(r'^myapp/', include('myapp.urls', namespace='myapp')),
+     url(r'^ToDo/', include('ToDo.urls', namespace='ToDo')),
 ]
