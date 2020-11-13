@@ -44,6 +44,7 @@ INSTALLED_APPS = (
     'comments',
     'form_data',
     'myapp',
+    'ToDo',
 )
 
 MIDDLEWARE_CLASSES = (
