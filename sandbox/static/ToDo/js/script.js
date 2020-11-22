@@ -1,5 +1,5 @@
 let queryToGetAllInfo = async () => {
-    let url = 'temp.php'; // you send me all info from the database which saves All.
+    let url = 'load/'; // you send me all info from the database which saves All.
     let response = await fetch(url); //method GET
     if (response.ok) {
         let allData = await response.json();
@@ -72,7 +72,7 @@ let init = (allData) => {
         list.push(obj);
 
         let submitSendToServer = (async () => {
-            let url = `temp.php`;   ///////////////// Submit url path (change!)
+            let url = `/todo/submit/`;   ///////////////// Submit url path (change!)
             /// Send to the database which saves All.
             let response = await fetch(url, {
                 method: `POST`,
@@ -105,7 +105,7 @@ let init = (allData) => {
                     if (doner[doner.length - 1]) {
                         dones.push(doner[doner.length - 1]);
                         let submitSendToServer = (async () => {
-                            let url = `temp.php`;   ///////////////// Done url path (change!)
+                            let url = `/todo/done/`;   ///////////////// Done url path (change!)
                             /// Send to the database which saves the only list of dones.
                             /// When you get this object you should delete it in the database which saves All.
                             let response = await fetch(url, {
@@ -140,7 +140,7 @@ let init = (allData) => {
                     let remover = list.splice(index, 1);
                     console.log(remover);
 
-                    let url = `temp.php`; // Delete url path (change!).
+                    let url = `/todo/delete/`; // Delete url path (change!).
                     // You have to delete this object which has just been sent to the server.
                     // It is needed to be deleted in the database which saves All and in the database which saves the only list of dones.
                     fetch(url, {
@@ -188,7 +188,7 @@ let init = (allData) => {
             }
 
             let promise = new Promise((resolve, reject) => {
-                let url = `temp.php`; ///////////////// url path (change!)
+                let url = `/todo/done_all/`; ///////////////// url path (change!)
                 // Sending the all rest of the objects(dones) to the server.
                 // it is needed to be saved like extra ones only in the database which saves the only list of dones.
                 fetch(url, {
@@ -228,7 +228,7 @@ let init = (allData) => {
             }
 
             let promise = new Promise((resolve, reject) => {
-                let url = `temp.php`; ///////////////// url path (change!)
+                let url = `/todo/remove_all_undone/`; ///////////////// url path (change!)
                 // Sending the all rest of the objects to the server to be deleted.
                 // it is needed to be deleted like all displayed extra ones in the database which saves All.
                 fetch(url, {
