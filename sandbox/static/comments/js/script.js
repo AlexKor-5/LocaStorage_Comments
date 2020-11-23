@@ -80,11 +80,28 @@ let init1 = (indexServer, dataObj) => {
     }
 
     let sendToServer = async (object, callback) => {
+
+        let getCookie = () => {
+            let matches = document.cookie.match(/csrftoken=([\w-]+)/);
+            if (matches[1]) {
+                return matches[1];
+            }else{
+             console.log(`cookie is not taken`);
+            }
+        }
+        //csrftoken
+
         let url = `temp/`;
+        let rigthToken = getCookie();
+        console.log(`rigthToken = ${rigthToken}`);
+
+        console.log(`rigth = ${rigthToken}`);
         fetch(url, {
             method: `POST`,
             headers: {
-                'Content-Type': 'application/json'
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=UTF-8',
+                'X-CSRFToken': rigthToken
             },
             body: JSON.stringify(object)
         })
