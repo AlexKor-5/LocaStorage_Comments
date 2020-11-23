@@ -39,6 +39,20 @@ let init1 = (indexServer, dataObj) => {
     Allcomments = [];
     let dataComments = document.getElementById(`dataComments`);
 
+
+    let getCookie = () => {
+        let matches = document.cookie.match(/csrftoken=([\w-]+)/);
+        if (matches[1]) {
+            return matches[1];
+        } else {
+            console.log(`cookie is not taken`);
+        }
+    }
+    //csrftoken
+    let rigthToken = getCookie();
+    console.log(`rigthToken = ${rigthToken}`);
+
+
     let displayAllServerData = async (DaTAObj) => {
         let dataObj = await DaTAObj;
         let sortOut = (() => {
@@ -80,12 +94,20 @@ let init1 = (indexServer, dataObj) => {
     }
 
     let sendToServer = async (object, callback) => {
+
         let url = `temp/`;
+        console.log(`rigth = ${rigthToken}`);
         fetch(url, {
             method: `POST`,
             headers: {
+<<<<<<< HEAD
                 'Content-Type': 'application/json',
                 'X-CSRFToken':'ahqfcbzMo48WJKcZLFLTyUmELeg2dkSQ'
+=======
+                'Accept': 'application/json',
+                'Content-Type': 'application/json; charset=UTF-8',
+                'X-CSRFToken': rigthToken
+>>>>>>> 84ce79177b411c5ea83169b6acb4286898287e02
             },
             body: JSON.stringify(object)
         })
@@ -102,6 +124,24 @@ let init1 = (indexServer, dataObj) => {
                     displayAllServerData(resObj);
                 })();
             });
+
+        // let url = `temp/`;
+        // let xhttp = new XMLHttpRequest();
+
+        // xhttp.onreadystatechange = () => {
+        //     if (xhttp.readyState == 4 && xhttp.status == 200) {
+        //         alert(`Sucsess !`);
+        //     }
+        // }
+        // xhttp.onload = () => {
+        //     // console.log(JSON.parse(xhttp.response));
+        // }
+
+        // xhttp.open(`POST`, url, true);
+        // xhttp.setRequestHeader(`Content-type`, `application/json`);
+        // xhttp.setRequestHeader(`X-CSRFToken`, `${rigthToken}`);
+        // xhttp.responseType = `json`;
+        // xhttp.send(JSON.stringify(object));
         return true;
     }
 
