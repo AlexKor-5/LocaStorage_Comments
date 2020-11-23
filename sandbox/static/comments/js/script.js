@@ -101,7 +101,7 @@ let init1 = (indexServer, dataObj) => {
             method: `POST`,
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken':'ahqfcbzMo48WJKcZLFLTyUmELeg2dkSQ'
+                'X-CSRFToken':'rntqfePJjlxQ4q3gxmGCAE7Vj5mjdM9J'
 
             },
             body: JSON.stringify(object)
