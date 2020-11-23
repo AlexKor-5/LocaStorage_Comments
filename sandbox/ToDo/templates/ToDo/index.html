@@ -27,7 +27,7 @@
                             <input type="text" class="form-control" id="text">
                             <a href="done_list/" target="_blank" >Open Done list</a>
                         </div>
-
+                        {% csrf_token %}
                         <button type="submit" class="btn btn-primary" id="btn-submit">Submit</button>
                         <button type="submit" class="btn btn-success" id="btn-doneall">Done all</button>
                         <button type="submit" class="btn btn-danger" id="btn-removeall">Remove all</button>
