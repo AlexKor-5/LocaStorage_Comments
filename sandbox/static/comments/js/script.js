@@ -100,14 +100,9 @@ let init1 = (indexServer, dataObj) => {
         fetch(url, {
             method: `POST`,
             headers: {
-<<<<<<< HEAD
                 'Content-Type': 'application/json',
                 'X-CSRFToken':'ahqfcbzMo48WJKcZLFLTyUmELeg2dkSQ'
-=======
-                'Accept': 'application/json',
-                'Content-Type': 'application/json; charset=UTF-8',
-                'X-CSRFToken': rigthToken
->>>>>>> 84ce79177b411c5ea83169b6acb4286898287e02
+
             },
             body: JSON.stringify(object)
         })
