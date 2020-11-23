@@ -102,7 +102,6 @@ let init1 = (indexServer, dataObj) => {
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken':rigthToken
-
             },
             body: JSON.stringify(object)
         })
