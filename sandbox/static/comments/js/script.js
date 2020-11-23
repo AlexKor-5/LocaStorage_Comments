@@ -39,6 +39,20 @@ let init1 = (indexServer, dataObj) => {
     Allcomments = [];
     let dataComments = document.getElementById(`dataComments`);
 
+
+    let getCookie = () => {
+        let matches = document.cookie.match(/csrftoken=([\w-]+)/);
+        if (matches[1]) {
+            return matches[1];
+        } else {
+            console.log(`cookie is not taken`);
+        }
+    }
+    //csrftoken
+    let rigthToken = getCookie();
+    console.log(`rigthToken = ${rigthToken}`);
+
+
     let displayAllServerData = async (DaTAObj) => {
         let dataObj = await DaTAObj;
         let sortOut = (() => {
@@ -81,20 +95,7 @@ let init1 = (indexServer, dataObj) => {
 
     let sendToServer = async (object, callback) => {
 
-        let getCookie = () => {
-            let matches = document.cookie.match(/csrftoken=([\w-]+)/);
-            if (matches[1]) {
-                return matches[1];
-            }else{
-             console.log(`cookie is not taken`);
-            }
-        }
-        //csrftoken
-
         let url = `temp/`;
-        let rigthToken = getCookie();
-        console.log(`rigthToken = ${rigthToken}`);
-
         console.log(`rigth = ${rigthToken}`);
         fetch(url, {
             method: `POST`,
@@ -118,6 +119,24 @@ let init1 = (indexServer, dataObj) => {
                     displayAllServerData(resObj);
                 })();
             });
+
+        // let url = `temp/`;
+        // let xhttp = new XMLHttpRequest();
+
+        // xhttp.onreadystatechange = () => {
+        //     if (xhttp.readyState == 4 && xhttp.status == 200) {
+        //         alert(`Sucsess !`);
+        //     }
+        // }
+        // xhttp.onload = () => {
+        //     // console.log(JSON.parse(xhttp.response));
+        // }
+
+        // xhttp.open(`POST`, url, true);
+        // xhttp.setRequestHeader(`Content-type`, `application/json`);
+        // xhttp.setRequestHeader(`X-CSRFToken`, `${rigthToken}`);
+        // xhttp.responseType = `json`;
+        // xhttp.send(JSON.stringify(object));
         return true;
     }
 
