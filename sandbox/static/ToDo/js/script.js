@@ -29,15 +29,18 @@ let init = (allData) => {
         let findMaxIndex = () => {
             let M = [];
             for (let i = 0; i < list.length; i++) {
-               M.push(list[i].index);
+                M.push(list[i].index);
             }
             console.log(M);
-            return Math.max(...M);
+            if (list.length == 0) {
+                toDolistIndex = -1;
+                return toDolistIndex;
+            } else {
+                return Math.max(...M);
+            }
         }
         toDolistIndex = findMaxIndex();
-
     })();
-
 
     let showItemsInDOM = (list) => {
         [..._out.children].forEach((element) => {
@@ -136,7 +139,8 @@ let init = (allData) => {
                             let response = await fetch(url, {
                                 method: `POST`,
                                 headers: {
-                                    'Content-Type': 'application/json'
+                                    'Content-Type': 'application/json',
+                                    'X-CSRFToken': rigthToken
                                 },
                                 body: JSON.stringify(doner[doner.length - 1])
                             })
@@ -169,9 +173,10 @@ let init = (allData) => {
                     // You have to delete this object which has just been sent to the server.
                     // It is needed to be deleted in the database which saves All and in the database which saves the only list of dones.
                     fetch(url, {
-                        method: `DELETE`,
+                        method: `POST`,
                         headers: {
-                            'Content-Type': 'application/json'
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': rigthToken
                         },
                         body: JSON.stringify(remover)
                     })
@@ -284,6 +289,8 @@ let init = (allData) => {
         // load all at the beginning
         let loadAllTasksFromDatabase = (() => {
             showItemsInDOM(allData);
+            redefineArr();
+            redefineRemoves();
         })();
 
         _out.addEventListener(`click`, clickBtnsDoneOn, false);
