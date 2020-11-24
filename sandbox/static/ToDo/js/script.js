@@ -167,7 +167,6 @@ let init = (allData) => {
                 if (element == event.toElement) {
 
                     let remover = list.splice(index, 1);
-                    console.log(remover);
 
                     let url = `/todo/delete/`; // Delete url path (change!).
                     // You have to delete this object which has just been sent to the server.
@@ -178,7 +177,7 @@ let init = (allData) => {
                             'Content-Type': 'application/json',
                             'X-CSRFToken': rigthToken
                         },
-                        body: JSON.stringify(remover)
+                        body: JSON.stringify(remover[remover.length - 1])
                     })
                         .then((response) => {
                             if (response.ok) return response.json();
