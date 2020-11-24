@@ -24,6 +24,21 @@ let init = (allData) => {
     console.log(`All data = `);
     console.log(allData);
 
+    let newAssignment = (() => {
+        list = allData;
+        let findMaxIndex = () => {
+            let M = [];
+            for (let i = 0; i < list.length; i++) {
+               M.push(list[i].index);
+            }
+            console.log(M);
+            return Math.max(...M);
+        }
+        toDolistIndex = findMaxIndex();
+
+    })();
+
+
     let showItemsInDOM = (list) => {
         [..._out.children].forEach((element) => {
             _out.removeChild(element);
@@ -58,6 +73,16 @@ let init = (allData) => {
         removes.reverse();
     }
 
+    let getCookie = () => {
+        let matches = document.cookie.match(/csrftoken=([\w-]+)/);
+        if (matches[1]) {
+            return matches[1];
+        } else {
+            console.log(`cookie is not taken`);
+        }
+    }
+    let rigthToken = getCookie();
+
     let addTaskToDOM = () => { //Call in main
 
         _text = document.getElementById(`text`);
@@ -77,7 +102,8 @@ let init = (allData) => {
             let response = await fetch(url, {
                 method: `POST`,
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': rigthToken
                 },
                 body: JSON.stringify(obj)
             })
@@ -87,7 +113,6 @@ let init = (allData) => {
         })();
 
         showItemsInDOM(list);
-        // saveToStorage();
 
         redefineArr();
         redefineRemoves();
@@ -256,21 +281,21 @@ let init = (allData) => {
     }
 
     let main = (() => {
-        // loadFromStorageToDOM();
+        // load all at the beginning
+        let loadAllTasksFromDatabase = (() => {
+            showItemsInDOM(allData);
+        })();
+
         _out.addEventListener(`click`, clickBtnsDoneOn, false);
         _out.addEventListener(`click`, clickBtnsRemoveOn, false);
+
         _btnSubmit.addEventListener(`click`, (event) => {
             event.preventDefault();
             addTaskToDOM();
         }, false);
+
         _btnDoneall.addEventListener(`click`, doneAllAction, false);
         _btnRemoveall.addEventListener(`click`, removeAllAction, false);
-
-        window.addEventListener(`storage`, () => {
-            // loadFromStorageToDOM();
-            console.log(`storage change!`);
-        }, false);
-
 
     })();
 }
