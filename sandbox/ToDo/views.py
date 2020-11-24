@@ -45,7 +45,7 @@ def done(request):
 
 def delete(request):
     print('delete  ', request.body)
-    print(request.body['todo'])
+    
     request_data = request.body
     
     data = json.loads(request_data)
