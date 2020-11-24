@@ -10,7 +10,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
         integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="{% static "ToDo/css/style.css" %}">
 
     <title>147-2</title>
 </head>
@@ -22,7 +22,7 @@
                 <form action="#">
                     <div class="alert alert-info">
                         <h1>Done</h1>
-                        <div style="padding-bottom: 20px"><a href="./index.html" target="_blank">Open to do page</a></div>
+                        <div style="padding-bottom: 20px"><a href="/todo/" target="_blank">Open to do page</a></div>
                         <button type="submit" class="btn btn-danger" id="btn-removeall">Remove all</button>
                     </div>
                 </form>
@@ -37,7 +37,7 @@
         </div>
     </div>
 
-    <script src="./scriptDone.js"></script>
+    <script src="{% static "ToDo/js/scriptDone.js" %}"></script>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -172,7 +172,7 @@ let init = (allData) => {
                     // You have to delete this object which has just been sent to the server.
                     // It is needed to be deleted in the database which saves All and in the database which saves the only list of dones.
                     fetch(url, {
-                        method: `POST`,
+                        method: `DELETE`,
                         headers: {
                             'Content-Type': 'application/json',
                             'X-CSRFToken': rigthToken
