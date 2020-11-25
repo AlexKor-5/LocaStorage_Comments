@@ -1,4 +1,16 @@
-let doneinit = () => {
+let loadAllDataStart = async () => {
+    let url = `/todo/load_done/`;
+    let response = await fetch(url);
+    let result = 0;
+    if (response.ok) {
+        result = await response.json();
+        doneinit(result);
+    } else {
+        console.log(`Error! in loadAllDataStart`);
+    }
+}
+
+let doneinit = (allData) => {
     _out = document.getElementById(`out`);
     btnsRemoveALL = document.getElementById(`btn-removeall`);
     dones = [];
@@ -6,21 +18,17 @@ let doneinit = () => {
     returnToList = [];
     list = [];
     let belter;
+    console.log(allData);
 
-    // let loadDataFromLocalStorage = () => {
-    //     if (localStorage.getItem(`dones`)) {
-    //         list = JSON.parse(localStorage.getItem(`list`));
-    //         dones = JSON.parse(localStorage.getItem(`dones`));
-    //     }
-    //     displayInDOM();
-    //     redefineBtns(`removes`);
-    //     redefineBtns(`returnTo`);
-    // }
-
-    // let saveIntoStorage = () => {
-    //     localStorage.setItem(`dones`, JSON.stringify(dones));
-    //     localStorage.setItem(`list`, JSON.stringify(list));
-    // };
+    let getCookie = () => {
+        let matches = document.cookie.match(/csrftoken=([\w-]+)/);
+        if (matches[1]) {
+            return matches[1];
+        } else {
+            console.log(`cookie is not taken`);
+        }
+    }
+    let rigthToken = getCookie();
 
     let redefineBtns = (btnType) => {
         if (btnType === `removes`) {
@@ -60,24 +68,63 @@ let doneinit = () => {
         if (!event.target.matches(`[data-btn-remove]`)) return;
         removes.forEach((element, index) => {
             if (element == event.toElement) {
-                dones.splice(index, 1);
+                let remover = dones.splice(index, 1);
+
+                let url = `/todo/delete/`;
+                fetch(url, {
+                    method: `DELETE`,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': rigthToken
+                    },
+                    body: JSON.stringify(remover[remover.length - 1])
+                })
+                    .then((response) => {
+                        if (response.ok) return response.json();
+                        else throw Error(`Server connection problem!`);
+                    })
+                    .then((res) => {
+                        console.log()
+                        console.log(res);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
+
                 displayInDOM();
-                // saveIntoStorage();
+
                 redefineBtns(`removes`);
                 redefineBtns(`returnTo`);
             }
         });
     }
+
     let bubblingActReturn = (event) => {
         if (!event.target.matches(`[data-btn-returnToDone]`)) return;
         returnToList.forEach((element, index) => {
             if (element == event.toElement) {
 
                 list.push(dones[index]);
-                console.log(dones[index]);
-                dones.splice(index, 1);
+                let returner = dones.splice(index, 1);
                 returnToList.splice(index, 1);
-                // saveIntoStorage();
+                
+                (async () => {
+                    let url = `/return`;
+                    let response = await fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': rigthToken
+                        },
+                        body: returner[returner.length - 1]
+                    });
+                    if (response.ok) {
+                        console.log(`OK Return`);
+                    } else {
+                        console.log(`Error Not Return`);
+                    }
+                })();
+
                 displayInDOM();
                 redefineBtns(`removes`);
                 redefineBtns(`returnTo`);
@@ -89,24 +136,40 @@ let doneinit = () => {
         for (let i = dones.length - 1; i >= 0; i--) {
             dones.splice(i, 1);
         }
-        // saveIntoStorage();
+
+        (async () => {
+            let url = `/todo/remove_all_done/`;
+            let response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': rigthToken
+                },
+                body: null
+            });
+        })();
+
+
         displayInDOM();
         redefineBtns(`removes`);
         redefineBtns(`returnTo`);
     }
 
     let main = (() => {
-        // loadDataFromLocalStorage();
-        window.addEventListener(`storage`, () => {
-            // loadDataFromLocalStorage();
+        // load all at the beginning
+        let loadAllTasksFromDatabase = (() => {
+            dones = allData;
             displayInDOM();
             redefineBtns(`removes`);
             redefineBtns(`returnTo`);
-           
-        }, false);
+        })();
+
         _out.addEventListener(`click`, bubblingAct, false);
         _out.addEventListener(`click`, bubblingActReturn, false);
         btnsRemoveALL.addEventListener(`click`, removeAll, false);
     })();
 }
-window.addEventListener(`load`, doneinit, false);
+window.addEventListener(`load`, loadAllDataStart, false);
+window.addEventListener(`focus`, () => {
+    loadAllDataStart();
+}, false);

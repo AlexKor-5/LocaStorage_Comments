@@ -1,13 +1,15 @@
-let queryToGetAllInfo = async () => {
+let queryToGetAllInfo = async (boolen = true) => {
     let url = 'load/'; // you send me all info from the database which saves All.
     let response = await fetch(url); //method GET
     if (response.ok) {
         let allData = await response.json();
-        init(allData);
+
+        init(allData, boolen);
+
     }
     else { console.log(`Error in loading all data at the beginning!`) };
 }
-let init = (allData) => {
+let init = (allData, boolen) => {
     let _text = document.getElementById(`text`);
     let _btnSubmit = document.getElementById(`btn-submit`);
     const _btnDoneall = document.getElementById(`btn-doneall`);
@@ -286,25 +288,33 @@ let init = (allData) => {
 
     let main = (() => {
         // load all at the beginning
-        let loadAllTasksFromDatabase = (() => {
+        let loadAllTasksFromDatabase = () => {
             showItemsInDOM(allData);
             redefineArr();
             redefineRemoves();
-        })();
+        };
 
-        _out.addEventListener(`click`, clickBtnsDoneOn, false);
-        _out.addEventListener(`click`, clickBtnsRemoveOn, false);
+        if (boolen) {
+            loadAllTasksFromDatabase();
 
-        _btnSubmit.addEventListener(`click`, (event) => {
-            event.preventDefault();
-            addTaskToDOM();
-        }, false);
+            _out.addEventListener(`click`, clickBtnsDoneOn, false);
+            _out.addEventListener(`click`, clickBtnsRemoveOn, false);
 
-        _btnDoneall.addEventListener(`click`, doneAllAction, false);
-        _btnRemoveall.addEventListener(`click`, removeAllAction, false);
+            _btnSubmit.addEventListener(`click`, (event) => {
+                event.preventDefault();
+                addTaskToDOM();
+            }, false);
 
+            _btnDoneall.addEventListener(`click`, doneAllAction, false);
+            _btnRemoveall.addEventListener(`click`, removeAllAction, false);
+        } else {
+            // load all at the beginning
+            loadAllTasksFromDatabase();
+
+        }
     })();
 }
-window.addEventListener(`load`, () => {
-    queryToGetAllInfo();
+window.addEventListener(`load`, queryToGetAllInfo, false);
+window.addEventListener(`pageshow`, () => {
+    queryToGetAllInfo(false);
 }, false);
